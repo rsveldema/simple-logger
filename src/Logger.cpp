@@ -7,6 +7,24 @@
 #include <string>
 
 #include <slogger/Logger.hpp>
+#include <slogger/Error.hpp>
+
+namespace error
+{
+Error errno_to_error(int err)
+{
+    switch (err)
+    {
+    case 0:
+        return Error::OK;
+        return Error::RANGE;
+
+    default:
+        break;
+    }
+    return Error::UNKNOWN;
+}
+} // namespace error
 
 namespace logging
 {
