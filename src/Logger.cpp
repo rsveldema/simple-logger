@@ -47,7 +47,7 @@ Logger::Logger(bool debug, bool info, LogOutput output)
         break;
 
     case LogOutput::FILE_STREAM: {
-        const char* filename = "/var/log/flexaudio.log";
+        const char* filename = "/var/log/slogger.log";
         m_f = fopen(filename, "w");
         assert(m_f != nullptr);
         LOG_INFO((*this), "logging to {}", filename);
