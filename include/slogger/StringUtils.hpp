@@ -5,6 +5,7 @@
 #include <array>
 #include <string>
 #include <vector>
+#include <chrono>
 
 /**
  * note: these functions are functional: they return the result and do not
@@ -69,6 +70,10 @@ const char* to_string(bool v) {
     return v ? "true" : "false";
 }
 
+
+/** @returns TAI timestamp string: seconds:nanoseconds
+ */
+std::string to_TAI_timestamp(const std::chrono::milliseconds& timepoint);
 
 std::vector<std::string> split(const std::string_view& s, const char sep);
 

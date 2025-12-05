@@ -1,10 +1,21 @@
 #include <cctype>
 #include <stdarg.h>
+#include <chrono>
+
 
 #include <slogger/StringUtils.hpp>
 
 namespace StringUtils
 {
+std::string to_TAI_timestamp(const std::chrono::milliseconds& timepoint)
+{
+    using namespace std::chrono;
+    const auto secs = duration_cast<seconds>(timepoint).count();
+    const auto nsecs =
+        duration_cast<nanoseconds>(timepoint - seconds(secs)).count();
+    return std::to_string(secs) + ":" + std::to_string(nsecs);
+}
+
 // we get name lists like: [foo, local]
 bool last_item_equals(const std::vector<std::string>& name_list, const std::string& last_item_name)
 {
