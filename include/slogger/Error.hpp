@@ -18,6 +18,7 @@ enum class Error
     ALSA_FAILURE,
     NO_ALSA_CAPTURE,
     NO_ALSA_PLAYBACK,
+    HOSTNAME_RESOLVE_FAILED,
     UNKNOWN
 };
 
