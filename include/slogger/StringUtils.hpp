@@ -13,6 +13,10 @@
 
 namespace StringUtils
 {
+/** We get name lists like: [foo, local], then check if the last equals "local"
+ */
+bool last_item_equals(const std::vector<std::string>& name_list, const std::string& last_item_name);
+
 template <typename T> bool contains(const std::vector<T>& l, const T elt)
 {
     for (auto it : l)
@@ -46,8 +50,18 @@ std::string array_to_string(const std::array<T, N>& arr)
 */
 std::string to_mdns_string(const std::vector<std::string>& list);
 
-/** creates a string: [elt1, elt2, ...] */
-std::string to_string(const std::vector<std::string>& list);
+/** see to_string(first, last, sep)
+ */
+std::string to_string(const std::vector<std::string>& list, 
+    const std::string& sep = ", ");
+
+/** creates a string: [elt1, elt2, ...] if sep == ', '
+ * elt1<sep>elt2<sep> otherwise
+ */
+std::string to_string(const std::vector<std::string>::const_iterator& first,
+    const std::vector<std::string>::const_iterator& last, 
+    const std::string& sep = ", ");
+
 
 [[maybe_unused]]
 static inline

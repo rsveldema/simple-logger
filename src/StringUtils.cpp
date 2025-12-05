@@ -5,6 +5,24 @@
 
 namespace StringUtils
 {
+// we get name lists like: [foo, local]
+bool last_item_equals(const std::vector<std::string>& name_list, const std::string& last_item_name)
+{
+    if (name_list.empty())
+    {
+        return false;
+    }
+    const auto& last = name_list.back();
+    if (last.size() >= last_item_name.size())
+    {
+        if (last == last_item_name)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 std::string to_upper(const std::string& s)
 {
     std::string ret;
@@ -107,20 +125,33 @@ std::optional<int32_t> parse_int(const std::string& s)
 }
 
 
-std::string to_string(const std::vector<std::string>& list)
+std::string to_string(const std::vector<std::string>::const_iterator& first,
+    const std::vector<std::string>::const_iterator& last, 
+    const std::string& sep)
 {
     std::string ret;
-    ret += "[";
-    const char* comma = "";
-    for (const auto& e : list)
+    if (sep == ", ") {
+        ret += "[";
+    }
+    std::string comma = "";
+    for (auto iter = first; iter != last; ++iter)
     {
         ret += comma;
-        ret += e;
-        comma = ", ";
+        ret += *iter;
+        comma = sep;
     }
-    ret += "]";
+    if (sep == ", ") {
+        ret += "]";
+    }
     return ret;
 }
+
+std::string to_string(const std::vector<std::string>& list, 
+    const std::string& sep)
+{
+    return to_string(list.cbegin(), list.cend(), sep);
+}
+
 
 
 std::string to_mdns_string(const std::vector<std::string>& list)
