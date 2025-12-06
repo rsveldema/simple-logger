@@ -31,6 +31,23 @@ template <typename T> bool contains(const std::vector<T>& l, const T elt)
 }
 
 
+[[maybe_unused]]
+static inline
+std::string to_string(bool v) {
+    return v ? "true" : "false";
+}
+
+[[maybe_unused]]
+static inline
+std::string to_string(int v) {
+    return std::to_string(v);
+}
+
+[[maybe_unused]]
+static inline
+std::string to_string(const std::string& v) {
+    return v;
+}
 
 /** @returns comma seperated string
  */
@@ -66,11 +83,6 @@ std::string to_string(const std::vector<std::string>::const_iterator& first,
     const std::string& sep = ", ");
 
 
-[[maybe_unused]]
-static inline
-const char* to_string(bool v) {
-    return v ? "true" : "false";
-}
 
 template<typename K, typename V>
 std::string to_string(const std::map<K, V>& m)
@@ -81,9 +93,9 @@ std::string to_string(const std::map<K, V>& m)
     for (const auto& it : m)
     {
         ret += comma;
-        ret += std::to_string(it.first);
+        ret += to_string(it.first);
         ret += ":";
-        ret += std::to_string(it.second);
+        ret += to_string(it.second);
         comma = ", ";
     }
     ret += "}";

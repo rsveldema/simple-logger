@@ -34,9 +34,10 @@ TEST(TestStrings, test_to_string_of_vec_of_strings)
 {
     ASSERT_EQ(StringUtils::to_string(true), "true");
     ASSERT_EQ(StringUtils::to_string(false), "false");
-    ASSERT_EQ(StringUtils::to_string({ { "" } }), "[]");
-    ASSERT_EQ(StringUtils::to_string({ { "abc" } }), "[abc]");
-    ASSERT_EQ(StringUtils::to_string({ { "abc" }, { "bcde" } }), "[abc, bcde]");
+
+    ASSERT_EQ(StringUtils::to_string(std::vector<std::string>{{ "" } }), "[]");
+    ASSERT_EQ(StringUtils::to_string(std::vector<std::string>{{ "abc" } }), "[abc]");
+    ASSERT_EQ(StringUtils::to_string(std::vector<std::string>{{ "abc" }, { "bcde" } }), "[abc, bcde]");
 }
 
 TEST(TestStrings, test_array_to_string)
