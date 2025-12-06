@@ -81,13 +81,24 @@ std::string to_string(const std::map<K, V>& m)
     for (const auto& it : m)
     {
         ret += comma;
-        ret += std::to_string(m.first);
+        ret += std::to_string(it.first);
         ret += ":";
-        ret += std::to_string(m.second);
+        ret += std::to_string(it.second);
         comma = ", ";
     }
     ret += "}";
     return ret;
+}
+
+
+template<typename K>
+std::string to_string(const std::optional<K>& m)
+{
+    if (m.has_value())
+    {
+        return to_string(m.value());
+    }
+    return "<None>";
 }
 
 std::vector<std::string> split(const std::string_view& s, const char sep);
