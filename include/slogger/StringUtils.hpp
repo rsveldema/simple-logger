@@ -5,7 +5,6 @@
 #include <array>
 #include <string>
 #include <vector>
-#include <chrono>
 
 /**
  * note: these functions are functional: they return the result and do not
@@ -53,14 +52,14 @@ std::string to_mdns_string(const std::vector<std::string>& list);
 
 /** see to_string(first, last, sep)
  */
-std::string to_string(const std::vector<std::string>& list, 
+std::string to_string(const std::vector<std::string>& list,
     const std::string& sep = ", ");
 
 /** creates a string: [elt1, elt2, ...] if sep == ', '
  * elt1<sep>elt2<sep> otherwise
  */
 std::string to_string(const std::vector<std::string>::const_iterator& first,
-    const std::vector<std::string>::const_iterator& last, 
+    const std::vector<std::string>::const_iterator& last,
     const std::string& sep = ", ");
 
 
@@ -69,11 +68,6 @@ static inline
 const char* to_string(bool v) {
     return v ? "true" : "false";
 }
-
-
-/** @returns TAI timestamp string: seconds:nanoseconds
- */
-std::string to_TAI_timestamp(const std::chrono::milliseconds& timepoint);
 
 std::vector<std::string> split(const std::string_view& s, const char sep);
 
