@@ -5,6 +5,7 @@
 #include <array>
 #include <string>
 #include <vector>
+#include <map>
 
 /**
  * note: these functions are functional: they return the result and do not
@@ -29,18 +30,20 @@ template <typename T> bool contains(const std::vector<T>& l, const T elt)
     return false;
 }
 
+
+
 /** @returns comma seperated string
  */
 template <typename T, size_t N>
-std::string array_to_string(const std::array<T, N>& arr)
+std::string array_to_string(const std::array<T, N>& arr, const std::string_view& sep = ",")
 {
-    const char* comma = "";
+    std::string comma;
     std::string ret;
     for (size_t i = 0; i < N; i++)
     {
         ret += comma;
         ret += std::to_string(arr[i]);
-        comma = ",";
+        comma = sep;
     }
     return ret;
 }
@@ -67,6 +70,24 @@ std::string to_string(const std::vector<std::string>::const_iterator& first,
 static inline
 const char* to_string(bool v) {
     return v ? "true" : "false";
+}
+
+template<typename K, typename V>
+std::string to_string(const std::map<K, V>& m)
+{
+    std::string comma;
+    std::string ret;
+    ret = "{";
+    for (const auto& it : m)
+    {
+        ret += comma;
+        ret += std::to_string(m.first);
+        ret += ":";
+        ret += std::to_string(m.second);
+        comma = ", ";
+    }
+    ret += "}";
+    return ret;
 }
 
 std::vector<std::string> split(const std::string_view& s, const char sep);
