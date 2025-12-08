@@ -22,6 +22,7 @@ enum class Error
     NO_ALSA_CAPTURE,
     NO_ALSA_PLAYBACK,
     HOSTNAME_RESOLVE_FAILED,
+    BAD_PPROTOCOL,
     UNKNOWN
 };
 
@@ -59,6 +60,8 @@ template <> struct std::formatter<error::Error>
             return std::format_to(ctx.out(), "HOSTNAME_RESOLVE_FAILED");
         case error::Error::UNKNOWN:
             return std::format_to(ctx.out(), "UNKNOWN");
+        case error::Error::BAD_PPROTOCOL:
+            return std::format_to(ctx.out(), "BAD_PPROTOCOL");
         }
         return std::format_to(ctx.out(), "UNKNOWN_ERROR_CODE");
     }
