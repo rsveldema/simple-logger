@@ -23,6 +23,7 @@ enum class Error
     NO_ALSA_PLAYBACK,
     HOSTNAME_RESOLVE_FAILED,
     BAD_PPROTOCOL,
+    INVALID_SDP,
     UNKNOWN
 };
 
@@ -62,6 +63,8 @@ template <> struct std::formatter<error::Error>
             return std::format_to(ctx.out(), "UNKNOWN");
         case error::Error::BAD_PPROTOCOL:
             return std::format_to(ctx.out(), "BAD_PPROTOCOL");
+        case error::Error::INVALID_SDP:
+            return std::format_to(ctx.out(), "INVALID_SDP");
         }
         return std::format_to(ctx.out(), "UNKNOWN_ERROR_CODE");
     }
