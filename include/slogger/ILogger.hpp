@@ -17,6 +17,29 @@
 
 namespace logging
 {
+// Where to log to, common to impls.
+enum class Level
+{
+    DEBUG,
+    INFO,
+    ERROR
+};
+
+// Where to log to, common to impls.
+enum class LogOutput
+{
+    CONSOLE,
+    FILE_STREAM
+};
+
+struct LogEntry
+{
+    uint32_t line;
+    const char* file;
+    Level level;
+    std::string str;
+};
+
 class ILogger
 {
 public:
@@ -28,21 +51,39 @@ public:
 
     virtual ~ILogger() {}
 
-    virtual void debug_msg(
-        uint32_t line, const char* file, const std::string msg) = 0;
-    virtual void info_msg(
-        uint32_t line, const char* file, const std::string msg) = 0;
-    virtual void error_msg(
-        uint32_t line, const char* file, const std::string msg) = 0;
+    void debug_msg(uint32_t line, const char* file, const std::string msg)
+    {
+        log(line, file, Level::DEBUG, msg);
+    }
+
+    void info_msg(uint32_t line, const char* file, const std::string msg)
+    {
+        log(line, file, Level::INFO, msg);
+    }
+
+    void error_msg(uint32_t line, const char* file, const std::string msg)
+    {
+        log(line, file, Level::ERROR, msg);
+    }
 
     bool enable_debug() const
     {
         return m_debug;
     }
+
     bool enable_info() const
     {
         return m_info;
     }
+
+    /** check if some other core/logger has something to say and print it in here
+    */
+    virtual void poll() {}
+
+    virtual std::optional<LogEntry> remove() { return std::nullopt; }
+
+    virtual void log(uint32_t line, const char* file, Level level,
+        const std::string& msg) = 0;
 
 protected:
     bool m_debug = true;
@@ -67,7 +108,8 @@ const char* strip_prefix(const char* path);
     }
 
 #define LOG_INFO_ONCE(logger, ...)                                             \
-    do {                                                                       \
+    do                                                                         \
+    {                                                                          \
         static bool init_once;                                                 \
         if (logger.enable_info() && !init_once)                                \
         {                                                                      \
@@ -82,18 +124,20 @@ const char* strip_prefix(const char* path);
         __LINE__, logging::strip_prefix(__FILE__), std::format(__VA_ARGS__))
 
 #define LOG_ERROR_ONCE(logger, ...)                                            \
-    do {                                                                       \
-        static bool init_once;                                                  \
-        if (!init_once)                                                         \
+    do                                                                         \
+    {                                                                          \
+        static bool init_once;                                                 \
+        if (!init_once)                                                        \
         {                                                                      \
             logger.error_msg(__LINE__, logging::strip_prefix(__FILE__),        \
                 std::format(__VA_ARGS__));                                     \
             init_once = true;                                                  \
         }                                                                      \
-    } while(0)
+    } while (0)
 
 #define LOG_ERROR_SLOW(logger, ...)                                            \
-    do {                                                                          \
+    do                                                                         \
+    {                                                                          \
         static uint32_t counter;                                               \
         if (counter++ > 1000)                                                  \
         {                                                                      \
@@ -101,6 +145,6 @@ const char* strip_prefix(const char* path);
                 std::format(__VA_ARGS__));                                     \
             counter = 0;                                                       \
         }                                                                      \
-    } while(0)
+    } while (0)
 
 } // namespace logging

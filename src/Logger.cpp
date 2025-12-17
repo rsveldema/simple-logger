@@ -6,8 +6,8 @@
 #include <stdio.h>
 #include <string>
 
-#include <slogger/Logger.hpp>
 #include <slogger/Error.hpp>
+#include <slogger/Logger.hpp>
 
 namespace error
 {
@@ -33,7 +33,8 @@ namespace
     int count_loggers = 0;
 }
 
-Logger::Logger(bool debug, bool info, LogOutput output)
+DirectConsoleLogger::DirectConsoleLogger(
+    bool debug, bool info, LogOutput output)
     : ILogger(debug, info)
     , m_output(output)
 {
@@ -56,7 +57,7 @@ Logger::Logger(bool debug, bool info, LogOutput output)
     }
 }
 
-Logger::~Logger()
+DirectConsoleLogger::~DirectConsoleLogger()
 {
     count_loggers--;
 
@@ -70,7 +71,7 @@ Logger::~Logger()
     }
 }
 
-void Logger::log(
+void DirectConsoleLogger::log(
     uint32_t line, const char* file, Level level, const std::string& msg)
 {
     const char* level_str = "";
@@ -99,6 +100,20 @@ void Logger::log(
     if (level == Level::ERROR)
     {
         fflush(m_f);
+    }
+}
+
+
+void DirectConsoleLogger::poll()
+{
+    uint32_t count = 0;
+    for (const auto& v : m_poll_loggers)
+    {
+        while (auto elt = v->remove())
+        {
+            log(elt.line, elt.file, elt.level, elt.msg);
+            count++;
+        }
     }
 }
 
