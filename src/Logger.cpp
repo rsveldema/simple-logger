@@ -9,6 +9,9 @@
 #include <slogger/Error.hpp>
 #include <slogger/Logger.hpp>
 
+static constexpr auto MAX_STEAL_LOGS_AT_A_TIME = 4;
+
+
 namespace error
 {
 Error errno_to_error(int err)
@@ -111,8 +114,12 @@ void DirectConsoleLogger::poll()
     {
         while (auto elt = v->remove())
         {
-            log(elt.line, elt.file, elt.level, elt.msg);
+            log(elt->line, elt->file, elt->level, elt->msg);
             count++;
+            if (count > MAX_STEAL_LOGS_AT_A_TIME)
+            {
+                break;
+            }
         }
     }
 }

@@ -37,7 +37,7 @@ struct LogEntry
     uint32_t line;
     const char* file;
     Level level;
-    std::string str;
+    std::string msg;
 };
 
 class ILogger
