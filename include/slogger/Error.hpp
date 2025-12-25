@@ -24,7 +24,8 @@ enum class Error
     HOSTNAME_RESOLVE_FAILED,
     BAD_PPROTOCOL,
     INVALID_SDP,
-    UNKNOWN
+    UNKNOWN,
+    NOT_READY
 };
 
 Error errno_to_error(int err);
@@ -43,6 +44,8 @@ template <> struct std::formatter<error::Error>
         switch (c) {
         case error::Error::OK:
             return std::format_to(ctx.out(), "OK");
+        case error::Error::NOT_READY:
+            return std::format_to(ctx.out(), "NOT_READY");
         case error::Error::RANGE:
             return std::format_to(ctx.out(), "RANGE");
         case error::Error::MMAP_FAILED:

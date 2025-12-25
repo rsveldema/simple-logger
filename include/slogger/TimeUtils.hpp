@@ -1,9 +1,10 @@
 #pragma once
 
-#include <ITimer.hpp>
 #include <cassert>
 #include <chrono>
 #include <functional>
+
+#include "ITimer.hpp"
 
 namespace time_utils
 {
@@ -109,6 +110,11 @@ class Timeout
 public:
     Timeout(ITimer& timer, const std::chrono::microseconds& t)
         : m_timer(timer)
+    {
+        reset(t);
+    }
+
+    void reset(const std::chrono::microseconds& t)
     {
         m_deadline = m_timer.get_time_ns() + t;
     }
