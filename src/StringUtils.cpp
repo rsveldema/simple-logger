@@ -136,8 +136,13 @@ std::optional<int32_t> parse_int(const std::string& s)
 }
 
 
+std::string to_string(const ToStringMixin& m)
+{
+    return m.to_string();
+}
+
 std::string to_string(const std::vector<std::string>::const_iterator& first,
-    const std::vector<std::string>::const_iterator& last, 
+    const std::vector<std::string>::const_iterator& last,
     const std::string& sep)
 {
     std::string ret;
@@ -157,7 +162,7 @@ std::string to_string(const std::vector<std::string>::const_iterator& first,
     return ret;
 }
 
-std::string to_string(const std::vector<std::string>& list, 
+std::string to_string(const std::vector<std::string>& list,
     const std::string& sep)
 {
     return to_string(list.cbegin(), list.cend(), sep);

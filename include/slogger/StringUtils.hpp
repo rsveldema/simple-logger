@@ -65,6 +65,14 @@ std::string array_to_string(const std::array<T, N>& arr, const std::string_view&
     return ret;
 }
 
+class ToStringMixin
+{
+public:
+    virtual std::string to_string() const = 0;
+};
+
+
+
 
 /** Result are appended strings with each prefixed by a byte of length
 */
@@ -84,6 +92,8 @@ std::string to_string(const std::vector<std::string>::const_iterator& first,
 
 
 
+std::string to_string(const ToStringMixin& m);
+
 template<typename K, typename V>
 std::string to_string(const std::map<K, V>& m)
 {
@@ -99,6 +109,22 @@ std::string to_string(const std::map<K, V>& m)
         comma = ", ";
     }
     ret += "}";
+    return ret;
+}
+
+template<typename V>
+std::string to_string(const std::vector<V>& m)
+{
+    std::string comma;
+    std::string ret;
+    ret = "[";
+    for (const auto& it : m)
+    {
+        ret += comma;
+        ret += to_string(it);
+        comma = ", ";
+    }
+    ret += "]";
     return ret;
 }
 
