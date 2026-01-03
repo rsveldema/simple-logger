@@ -25,10 +25,50 @@ namespace tai
     class nanoseconds
     {
     public:
-        explicit nanoseconds(uint64_t nanos)
+        nanoseconds() = default;
+
+        nanoseconds(uint64_t nanos)
             : m_nanos(nanos)
         {
         }
+
+        constexpr nanoseconds(const nanoseconds& nanos)
+            : m_nanos(nanos.m_nanos)
+        {
+        }
+
+        constexpr nanoseconds(nanoseconds&& nanos)
+            : m_nanos(nanos.m_nanos)
+        {
+        }
+
+        constexpr nanoseconds& operator=(const nanoseconds& nanos)
+        {
+            m_nanos = nanos.m_nanos;
+            return *this;
+        }
+
+        constexpr nanoseconds& operator=(nanoseconds&& nanos)
+        {
+            m_nanos = nanos.m_nanos;
+            return *this;
+        }
+
+        nanoseconds operator+(const nanoseconds& other) const
+        {
+            return nanoseconds(m_nanos + other.m_nanos);
+        }
+
+        bool operator>=(const nanoseconds& other) const
+        {
+            return m_nanos >= other.m_nanos;
+        }
+
+        bool operator>(const nanoseconds& other) const
+        {
+            return m_nanos > other.m_nanos;
+        }
+
         uint64_t count() const
         {
             return m_nanos;
@@ -38,8 +78,12 @@ namespace tai
          */
         std::string to_TAI_timestamp() const;
 
+        /** @returns parsed nanoseconds from TAI timestamp string: seconds:nanoseconds
+         */
+        static std::optional<nanoseconds> parse(const std::string& str);
+
     private:
-        uint64_t m_nanos;
+        uint64_t m_nanos = 0;
     };
 
     class milliseconds
