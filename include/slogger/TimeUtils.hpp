@@ -16,7 +16,8 @@ namespace tai
     static constexpr auto DAYS_PER_YEAR = 356ULL;
     static constexpr auto YEARS_DIFFERENCE_TO_PTP_EPOCH = 1972 - 1958;
 
-    static constexpr auto NANOS_PER_MILLI = 1000ULL;
+    static constexpr auto NANOS_PER_MICRO = 1000ULL;
+    static constexpr auto NANOS_PER_MILLI = 1000ULL * NANOS_PER_MICRO;
     static constexpr auto MILLIS_PER_SEC = 1000ULL;
 
     static constexpr auto MICROS_PER_SEC = 1000ULL * MILLIS_PER_SEC;
@@ -28,7 +29,12 @@ namespace tai
         nanoseconds() = default;
 
         nanoseconds(uint64_t nanos)
-            : m_nanos(nanos)
+            :  m_nanos(nanos)
+        {
+        }
+
+        nanoseconds(uint64_t secs, uint64_t nanos)
+            :  m_nanos((secs * NANOS_PER_SEC) + nanos)
         {
         }
 
@@ -69,6 +75,16 @@ namespace tai
             return m_nanos > other.m_nanos;
         }
 
+        uint64_t get_secs() const
+        {
+            return m_nanos / NANOS_PER_SEC;
+        }
+
+        uint64_t get_nanos() const
+        {
+            return m_nanos % NANOS_PER_SEC;
+        }
+
         uint64_t count() const
         {
             return m_nanos;
@@ -83,6 +99,7 @@ namespace tai
         static std::optional<nanoseconds> parse(const std::string& str);
 
     private:
+        /** we keep a single nanos fields which will overflow in 500 or so years */
         uint64_t m_nanos = 0;
     };
 
@@ -137,14 +154,21 @@ namespace tai
     {
         // epoch in chrono::tai is 1958-01-01 00:00:00.
         // for PTP/SMPTE we need an epoch of  1970-01-01
-        // THis means adding 12 years to the chono
-        // For TAI a day is exactly  86,400 seconds.
+        // This means adding 12 years to the chrono
+        // For TAI a day is exactly  86,400 seconds (24 * 60 * 60)
 
         const auto tai_now = std::chrono::tai_clock::now().time_since_epoch();
         const auto secs_too_much = std::chrono::seconds(
             TAI_SECS_PER_DAY * DAYS_PER_YEAR * YEARS_DIFFERENCE_TO_PTP_EPOCH);
         const auto tai_adjusted = tai_now - secs_too_much;
-        return nanoseconds(tai_adjusted.count());
+        
+        const auto secs =
+            std::chrono::duration_cast<std::chrono::seconds>(tai_adjusted)
+                .count();
+        const auto nanos = std::chrono::duration_cast<std::chrono::nanoseconds>(
+                              tai_adjusted - std::chrono::seconds(secs))
+                              .count();
+        return nanoseconds(secs, nanos);
     }
 } // namespace tai
 

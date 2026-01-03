@@ -10,11 +10,9 @@ namespace time_utils
     {
         std::string nanoseconds::to_TAI_timestamp() const
         {
-            seconds secs(*this);
-
-            const auto nanos_left = count() - (secs.count() * NANOS_PER_SEC);
-
-            return std::format("{}:{}", secs.count(), nanos_left);
+            uint64_t secs = m_nanos / NANOS_PER_SEC;
+            uint64_t nanos = m_nanos % NANOS_PER_SEC;
+            return std::format("{}:{}", secs, nanos);
         }
 
         
@@ -35,7 +33,7 @@ namespace time_utils
                 const uint64_t secs = std::stoull(secs_str);
                 const uint64_t nanos = std::stoull(nanos_str);
 
-                return nanoseconds((secs * NANOS_PER_SEC) + nanos);
+                return nanoseconds(secs * NANOS_PER_SEC + nanos);
             }
             catch (const std::exception&)
             {
