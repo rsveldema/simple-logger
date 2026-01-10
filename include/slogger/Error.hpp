@@ -24,8 +24,15 @@ enum class Error
     HOSTNAME_RESOLVE_FAILED,
     BAD_PPROTOCOL,
     INVALID_SDP,
+    CONNECTION_REFUSED,
+    BAD_ARGUMENT,
+    PERMISION_DENIED,
     UNKNOWN,
-    NOT_READY
+    INTERRUPTED,
+    BAD_FILE_DESCRIPTOR,
+    NOT_READY,
+    BUSY,
+    NO_SPACE_LEFT_ON_DEVICE
 };
 
 Error errno_to_error(int err);
@@ -68,6 +75,20 @@ template <> struct std::formatter<error::Error>
             return std::format_to(ctx.out(), "BAD_PPROTOCOL");
         case error::Error::INVALID_SDP:
             return std::format_to(ctx.out(), "INVALID_SDP");
+        case error::Error::CONNECTION_REFUSED:
+            return std::format_to(ctx.out(), "CONNECTION_REFUSED");
+        case error::Error::BAD_ARGUMENT:
+            return std::format_to(ctx.out(), "BAD_ARGUMENT");
+        case error::Error::PERMISION_DENIED:
+            return std::format_to(ctx.out(), "PERMISION_DENIED");
+        case error::Error::INTERRUPTED:
+            return std::format_to(ctx.out(), "INTERRUPTED");
+        case error::Error::BAD_FILE_DESCRIPTOR:
+            return std::format_to(ctx.out(), "BAD_FILE_DESCRIPTOR");
+        case error::Error::BUSY:
+            return std::format_to(ctx.out(), "BUSY");
+        case error::Error::NO_SPACE_LEFT_ON_DEVICE:
+            return std::format_to(ctx.out(), "NO_SPACE_LEFT_ON_DEVICE");
         }
         return std::format_to(ctx.out(), "UNKNOWN_ERROR_CODE");
     }

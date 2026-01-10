@@ -16,12 +16,44 @@ namespace error
 {
 Error errno_to_error(int err)
 {
+    if (err < 0)
+    {
+        err = -err;
+    }
     switch (err)
     {
     case 0:
         return Error::OK;
+    case EINVAL:
+        return Error::BAD_ARGUMENT;
+    case ECONNREFUSED:
+        return Error::CONNECTION_REFUSED;
+    case EFAULT:
+    case ENOMEM:
+        return Error::MMAP_FAILED;
+    case ERANGE:
         return Error::RANGE;
-
+    case EAGAIN:
+        return Error::NOT_READY;
+    case ENOENT:
+        return Error::INVALID_SDP;
+    case EPROTONOSUPPORT:
+        return Error::BAD_PPROTOCOL;
+    case EHOSTUNREACH:
+        return Error::HOSTNAME_RESOLVE_FAILED;
+    case EIO:
+        return Error::ALSA_FAILURE;
+    case EPERM:
+    case EACCES:
+        return Error::PERMISION_DENIED;
+    case EINTR:
+        return Error::INTERRUPTED;
+    case EBADF:
+        return Error::BAD_FILE_DESCRIPTOR;
+    case EBUSY:
+        return Error::BUSY;
+    case ENOSPC:
+        return Error::NO_SPACE_LEFT_ON_DEVICE;
     default:
         break;
     }
