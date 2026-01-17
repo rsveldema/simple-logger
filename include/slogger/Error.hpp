@@ -32,7 +32,8 @@ enum class Error
     BAD_FILE_DESCRIPTOR,
     NOT_READY,
     BUSY,
-    NO_SPACE_LEFT_ON_DEVICE
+    NO_SPACE_LEFT_ON_DEVICE,
+    SRTP_FAILED_TO_INIT
 };
 
 Error errno_to_error(int err);
@@ -89,6 +90,8 @@ template <> struct std::formatter<error::Error>
             return std::format_to(ctx.out(), "BUSY");
         case error::Error::NO_SPACE_LEFT_ON_DEVICE:
             return std::format_to(ctx.out(), "NO_SPACE_LEFT_ON_DEVICE");
+        case error::Error::SRTP_FAILED_TO_INIT:
+            return std::format_to(ctx.out(), "SRTP_FAILED_TO_INIT");
         }
         return std::format_to(ctx.out(), "UNKNOWN_ERROR_CODE");
     }
