@@ -147,4 +147,43 @@ const char* strip_prefix(const char* path);
         }                                                                      \
     } while (0)
 
+
+#define LOG_INFO_SLOW(logger, ...)                                            \
+    do                                                                         \
+    {                                                                          \
+        static uint32_t counter;                                               \
+        if (counter++ > 1000)                                                  \
+        {                                                                      \
+            logger.info_msg(__LINE__, logging::strip_prefix(__FILE__),        \
+                std::format(__VA_ARGS__));                                     \
+            counter = 0;                                                       \
+        }                                                                      \
+    } while (0)
+
+
+#define LOG_INFO_VERY_SLOW(logger, ...)                                            \
+    do                                                                         \
+    {                                                                          \
+        static uint32_t counter;                                               \
+        if (counter++ > 10000)                                                  \
+        {                                                                      \
+            logger.info_msg(__LINE__, logging::strip_prefix(__FILE__),        \
+                std::format(__VA_ARGS__));                                     \
+            counter = 0;                                                       \
+        }                                                                      \
+    } while (0)
+
+
+#define LOG_ERROR_VERY_SLOW(logger, ...)                                            \
+    do                                                                         \
+    {                                                                          \
+        static uint32_t counter;                                               \
+        if (counter++ > 10000)                                                  \
+        {                                                                      \
+            logger.error_msg(__LINE__, logging::strip_prefix(__FILE__),        \
+                std::format(__VA_ARGS__));                                     \
+            counter = 0;                                                       \
+        }                                                                      \
+    } while (0)
+
 } // namespace logging
